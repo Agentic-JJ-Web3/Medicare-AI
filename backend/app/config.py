@@ -1,0 +1,27 @@
+import os 
+from pydantic_settings import BaseSettings
+from pydantic import Field
+from langchain_google_genai import ChatGoogleGenerativeAI
+from functools import lru_cache
+
+
+class Settings(BaseSettings):
+    google_api_key: str = Field(..., description="Google API Key")
+    tavily_api_key: str = Field(..., description="Tavily API Key")
+    host: str = Field(default="0.0.0.0")
+    port: int = Field(default=8000)
+    cors_origins: str = Field(default="http://loaclhost:3000")
+    gemini_model: str = Field(default="gemini-2.0-flash-exp")
+    temperature = float = Field(default=0.7, ge=0.0, le=2.0)
+    max_tokens: int = Field(default=2048, ge=100, le=8192)
+    max_file_size: int = Field(default=10 * 1024 * 1024) #10MB
+
+    class Config:
+        env_file = ".env"
+        case_sensitive = False
+
+    @property
+    def cors_origins_list(self):
+        return [origin.strip() for origin in self.cors_origins.split(",")]
+
+Settings = Settings()

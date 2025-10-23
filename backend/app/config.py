@@ -25,3 +25,23 @@ class Settings(BaseSettings):
         return [origin.strip() for origin in self.cors_origins.split(",")]
 
 Settings = Settings()
+
+@lru_cache()
+def load_google_llm():
+    return ChatGoogleGenerativeAI(
+        model=Settings.gemini_model,
+        google_api_key =Settings.google_api_key,
+        temperature=Settings.temperature,
+        max_output_tokens=Settings.max_tokens,
+        convert_system_message_to_human=True    )
+
+@lru_cache()
+def load_google_vision_llm():
+    return ChatGoogleGenerativeAI(
+        model =Settings.gemini_model,
+        google_api_key =Settings.google_api_key,
+        temeperature=0.5,
+        max_output_tokens=Settings.max_tokens,
+        convert_system_message_to_human=True
+
+    )

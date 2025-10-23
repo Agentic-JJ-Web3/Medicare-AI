@@ -16,3 +16,44 @@ class ChatResponse(BaseModel):
     respons: str
     language: str
     timestamp: datetime
+
+class AnalysisRequest(BaseModel):
+    text: str = Field(..., min_length=1)
+    context : str = Field(default="")
+    language: str = Field(dafault="en")
+
+class MedicalAnalysis(BaseModel):
+    summary: str
+    key_findings: list[str]
+    recommendations: list[str]
+    next_steps: list[str]
+
+class AnalysisResponse(BaseModel):
+    summary: str
+    key_findinds: list[str]
+    recommendations: list[str]
+    next_steps: list[str]
+    disclaimer: str
+    language: str
+    timestampt:datetime
+
+class ImageAnalysisResponse(BaseModel):
+    extracted_text : str
+    analysis: AnalysisResponse
+
+class ResearchRequest(BaseModel):
+    query: str = Field(..., min_length=3, max_length=200)
+    max_results: int = Field(default=5, ge=1, le=10)
+    langauge: str = Field(default="en")
+
+class ResearchResult(BaseModel):
+    title: str
+    url: str
+    content: str
+    score: float
+
+class ReasearchResponse(BaseModel):
+    query: str
+    results: list[ResearchResult]
+    summary: str
+    timestamp: datetime
